@@ -36,3 +36,5 @@ where ```server``` is the server's hostname or IP address.
 
 
 To manipulate the data, simply edit the ```processData(host,data)``` method.
+The host parameter is a string containing the hostanme of the associated data.
+The data parameter is of type ```Signal``` from ```Signal.py```.
