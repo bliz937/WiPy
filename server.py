@@ -34,7 +34,7 @@ def listen(sock,time):
 			client,address = sock.accept()
 			sockets.append(client)
 			client.settimeout(60)
-			threading.Thread(target=clientListen,args=(client,address,sockets,time[0])).start()
+			threading.Thread(target=clientListen,args=(client,address,sockets,time)).start()
 	except KeyboardInterrupt:
 		sys.exit(0)
 
@@ -100,7 +100,7 @@ def closeClient(sock):
 
 if(__name__ == "__main__"):
 	parser = argparse.ArgumentParser(description="Receives WiFi signal strength, mW and dBm, from multiple clients.")
-	parser.add_argument("-t", help="Time in seconds to wait until the next signal is sent to the server. Default is 2 seconds.", dest="time", type=float, nargs=1, default=2)
+	parser.add_argument("-t", help="Time in seconds to wait until the next signal is sent to the server. Default is 2 seconds.", dest="time", type=float, nargs=1, default=2.0)
 	parser.add_argument("-i", help="Interface to listen on - IP. Default is all interfaces.", dest="LISTEN_IP", type=str, nargs=1, default="0.0.0.0")
 	parser.add_argument("-p", help="Port number to listen on. Default is 12000. Need to adjust accordinlgy client side if this is changed.", dest="Port", type=int, nargs=1, default=12000)
 
@@ -108,4 +108,6 @@ if(__name__ == "__main__"):
 
 	sock = createSocket(args.LISTEN_IP,args.Port)
 #	atexit.register(cleanExit,sock)
+	if(type(args.time) != float):
+		args.time = float(args.time[0])
 	listen(sock,args.time)
