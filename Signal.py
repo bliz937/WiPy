@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import json
-import socket
 
 class Signal(object):
         def __init__(self,dBm,mW):
@@ -12,7 +11,7 @@ class Signal(object):
                 return "dBm: {}\nmW : {}".format(self.dBm, self.mW)
 
         def toJSON(self):
-                return json.dumps(self, default=lambda o: o.__dict__,indent=4)
+                return json.dumps(self, default=lambda o: o.__dict__)
 
 def fromJSON(js):
 	j = json.loads(js)

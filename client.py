@@ -8,7 +8,9 @@ import subprocess
 import socket
 import json
 import argparse
+import sys
 from Signal import *
+from time import sleep
 
 """
 Using the wavemon package, we get the signal strength - mW and dBm.
@@ -33,20 +35,37 @@ def send(sock):
 	hostname = socket.gethostname()
 
 	try:
-		print("Sending hostname size")
-		sock.send(str(hostname.__sizeof__()))
-		print("Sending hostname")
-		sock.send(hostname)
-		print("Deleting hostname variable")
+		#print("Sending hostname")
+		sock.send(hostname+"\n")
+		#print("Deleting hostname variable")
 		del hostname
-		print("Awaiting time")
-		time = sock.recv(24)
+		#print("Awaiting time")
+		time = -1
+		buffr = ""
+
+		while(time == -1):
+			buff = sock.recv(32)
+			buffr += buff
+
+			if('\n' in buff):
+				indx = buffr.index('\n')
+		#		print("Getting time: >%s<" % buffr[:indx])
+				time = float(buffr[:indx])
+				buffr = buffr[indx+1:]
+
 		print("Received time of %s"%time)
 		while(True):
-			break
+			sleep(time)
+			payload = getSignalWaveMon().toJSON()
+			sock.send(payload+"\n")
+
+	except KeyboardInterrupt:
+		sys.exit(0)
 	finally:
+		print("Closing socket")
 		sock.shutdown(socket.SHUT_RDWR)
 		sock.close()
+		print("Done")
 
 if(__name__ == "__main__"):
 	#print(fromJSON(getSignalWaveMon().toJSON()))
