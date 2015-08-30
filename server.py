@@ -74,7 +74,7 @@ def clientListen(client,address,sockets,time):
 #				print("data: %s"%buffr[:indx])
 				data = fromJSON(buffr[:indx])
 				buffr = buffr[indx+1:]
-				print("%s\n%s\n"%(host,data))			
+				processData(host,data)
 	except Exception, e:
 		print("\nSomething went wrong... %s"%e)
 	finally:
@@ -97,6 +97,9 @@ def closeClient(sock):
 	print("Closing client socket")
 	sock.shutdown(socket.SHUT_RDWR)
 	sock.close()
+
+def processData(host,data):
+	print("%s\n%s\n"%(host,data))
 
 if(__name__ == "__main__"):
 	parser = argparse.ArgumentParser(description="Receives WiFi signal strength, mW and dBm, from multiple clients.")

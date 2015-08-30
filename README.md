@@ -33,3 +33,6 @@ python client.py -s server
 ```
 
 where ```server``` is the server's hostname or IP address.
+
+
+To manipulate the data, simply edit the ```processData(host,data)``` method.
